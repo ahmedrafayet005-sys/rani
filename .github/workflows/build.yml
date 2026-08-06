@@ -19,12 +19,15 @@ jobs:
       - name: Set up Java JDK
         uses: actions/setup-java@v3
         with:
-          distribution: 'temurin'          java-version: '17'
+          distribution: 'temurin'
+          java-version: '17'
 
       - name: Set up Flutter SDK
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.x'          channel: 'stable'          cache: true
+          flutter-version: '3.19.x'
+          channel: 'stable'
+          cache: true
 
       - name: Install Dependencies
         run: flutter pub get
