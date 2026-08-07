@@ -30,8 +30,6 @@ jobs:
 
       - name: Ensure local.properties with flutter.sdk
         run: |
-          FLUTTER_BIN=
-          FLUTTER_DIR=.
           echo flutter.sdk= > android/local.properties
           cat android/local.properties
 
