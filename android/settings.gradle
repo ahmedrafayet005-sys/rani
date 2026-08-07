@@ -6,7 +6,13 @@ pluginManagement {
             localPropertiesFile.withReader("UTF-8") { reader -> properties.load(reader) }
         }
         def sdkPath = properties.getProperty("flutter.sdk")
-        assert sdkPath != null, "flutter.sdk not set in local.properties"
+        if (sdkPath == null || sdkPath.trim().isEmpty()) {
+            sdkPath = System.getenv("FLUTTER_ROOT")
+        }
+        if (sdkPath == null || sdkPath.trim().isEmpty()) {
+            sdkPath = System.getenv("FLUTTER_HOME")
+        }
+        assert sdkPath != null, "flutter.sdk not set in local.properties and FLUTTER_ROOT env var is missing"
         return sdkPath
     }()
 
