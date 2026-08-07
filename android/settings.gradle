@@ -2,23 +2,20 @@ pluginManagement {
     def flutterSdkPath = {
         def properties = new Properties()
         def localPropertiesFile = new File(settingsDir, "local.properties")
-        println "[GRADLE DEBUG] settingsDir = " + settingsDir.absolutePath
-        println "[GRADLE DEBUG] localPropertiesFile exists = " + localPropertiesFile.exists()
         if (localPropertiesFile.exists()) {
-            println "[GRADLE DEBUG] localPropertiesFile text = 
-" + localPropertiesFile.text
-            localPropertiesFile.withInputStream { stream -> properties.load(stream) }
+            localPropertiesFile.withInputStream { stream ->
+                properties.load(stream)
+            }
         }
-        println "[GRADLE DEBUG] properties keys = " + properties.keySet()
         def sdkPath = properties.getProperty("flutter.sdk")
-        println "[GRADLE DEBUG] sdkPath from prop = '" + sdkPath + "'"
-        if (sdkPath == null || sdkPath.trim().isEmpty()) {
+        if (sdkPath == null || sdkPath.toString().trim().isEmpty()) {
             sdkPath = System.getenv("FLUTTER_ROOT")
-            println "[GRADLE DEBUG] sdkPath from FLUTTER_ROOT = '" + sdkPath + "'"
+        }
+        if (sdkPath == null || sdkPath.toString().trim().isEmpty()) {
+            sdkPath = System.getenv("FLUTTER_HOME")
         }
         return sdkPath
     }()
-    println "[GRADLE DEBUG] final flutterSdkPath = '" + flutterSdkPath + "'"
 
     includeBuild(flutterSdkPath + "/packages/flutter_tools/gradle")
 
