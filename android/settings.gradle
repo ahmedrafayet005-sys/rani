@@ -5,12 +5,25 @@ pluginManagement {
         if (localPropertiesFile.exists()) {
             localPropertiesFile.withReader("UTF-8") { reader -> properties.load(reader) }
         }
-        def flutterSdkPath = properties.getProperty("flutter.sdk")
-        if (flutterSdkPath == null) {
-            flutterSdkPath = System.getenv("FLUTTER_ROOT")
+        def sdkPath = properties.getProperty("flutter.sdk")
+        if (sdkPath != null && !sdkPath.isEmpty()) return sdkPath
+
+        if (System.getenv("FLUTTER_ROOT") != null) return System.getenv("FLUTTER_ROOT")
+        if (System.getenv("FLUTTER_HOME") != null) return System.getenv("FLUTTER_HOME")
+
+        try {
+            def proc = ["which", "flutter"].execute()
+            proc.waitFor()
+            def flutterBin = proc.text.trim()
+            if (flutterBin) {
+                def binFile = new File(flutterBin)
+                return binFile.parentFile.parentFile.absolutePath
+            }
+        } catch (Exception e) {
+            // Ignore execution failure
         }
-        assert flutterSdkPath != null, "flutter.sdk not set in local.properties and FLUTTER_ROOT environment variable not set"
-        return flutterSdkPath
+
+        throw new GradleException("Flutter SDK path not found.")
     }()
 
     includeBuild("/packages/flutter_tools/gradle")
