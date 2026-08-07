@@ -12,7 +12,7 @@ pluginManagement {
         if (sdkPath == null || sdkPath.trim().isEmpty()) {
             sdkPath = System.getenv("FLUTTER_HOME")
         }
-        assert sdkPath != null, "flutter.sdk not set in local.properties and FLUTTER_ROOT env var is missing"
+        assert sdkPath != null && !sdkPath.trim().isEmpty(), "flutter.sdk not set in local.properties and FLUTTER_ROOT env var is missing"
         return sdkPath
     }()
 
